@@ -45,7 +45,7 @@ def process_solar_data(solar_sheet_df, template_df, month, year, meter_mapping):
         # Update template with deltas
         for idx, row in template_df.iterrows():
             date = row['Time'].date()
-            ref_meter = row['Reference Meter']
+            ref_meter = row['Reference meter']
             
             # Find the corresponding meter in solar sheet
             solar_meter = None
@@ -92,6 +92,14 @@ def main():
     meter_mapping = {
         'JAFZA 1-Meter 1': 'Jafza 1-Meter 1',
         'JAFZA 1-Meter 2': 'Jafza 1-Meter 2',
+        'JAFZA 2-Meter 1': 'Jafza 2-Meter 1',
+        'JAFZA 2-Meter 2': 'Jafza 2-Meter 2',
+        'JAFZA 3-Meter 1': 'Jafza 3-Meter 1',
+        'JAFZA 3-Meter 2': 'Jafza 3-Meter 2',
+        'JAFZA 4': 'Jafza 4-Meter 1',
+        'DAFZA 2': 'DAFZA 2-Meter 1',
+        'CGF': 'DWC-CGF-Meter 1',
+        'AFR': 'DWC-AFR-Meter 2',
     }
     
     # Display editable meter mapping

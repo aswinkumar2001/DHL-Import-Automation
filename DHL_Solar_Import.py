@@ -40,7 +40,7 @@ def process_solar_data(solar_sheet_df, template_df, month, year, meter_mapping):
                     deltas[(date, meter)] = delta
         
         # Process the template - convert time to datetime
-        template_df['Time'] = pd.to_datetime(template_df['Time'], format='%d/%m/%Y %H:%M:%S')
+        template_df['Time'] = pd.to_datetime(template_df['Time'], format='%d-%m-%Y %H:%M:%S')
         
         # Update template with deltas
         for idx, row in template_df.iterrows():

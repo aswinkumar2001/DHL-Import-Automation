@@ -81,9 +81,16 @@ def main():
     
     # Placeholder for meter mapping - you can replace this with your actual mapping
     meter_mapping = {
-        'JAFZA 1-Meter 1': 'Jafza 1-Meter 1',
-        'JAFZA 1-Meter 2': 'Jafza 1-Meter 2',
-        # Add more mappings as needed
+        'JAFZA 1-Meter 1': 'JAFZA 1-Meter 1',
+        'JAFZA 1-Meter 2': 'JAFZA 1-Meter 2',
+        'JAFZA 3-Meter 1': 'JAFZA 3-Meter 1',
+        'JAFZA 3-Meter 2': 'JAFZA 3-Meter 2',
+        'JAFZA 4': 'JAFZA 4-Meter 1',
+        'JAFZA 2-Meter 1': 'JAFZA 2-Meter 1',
+        'JAFZA 2-Meter 2': 'JAFZA 2-Meter 2',
+        'DAFZA 2': 'DAFZA 2-Meter 1',
+        'AFR': 'DWC-AFR-Meter 2',
+        'CGF': 'DWC-CGF-Meter 1'
     }
     
     # Display editable meter mapping (optional)

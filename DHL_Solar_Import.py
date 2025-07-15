@@ -4,29 +4,45 @@ from datetime import datetime, timedelta
 import calendar
 import io
 
-# Meter mapping dictionary - you can edit this later with your actual mappings
+# Complete meter mapping dictionary based on your example
 METER_MAPPING = {
     "JAFZA 1-Meter 1": "DAN1/TY/PHLS/ELEC/LV/01-MDB_Energy Meter",
     "JAFZA 1-Meter 2": "DAN1/TY/PHLS/ELEC/LV/02-MDB_Energy Meter",
-    "JAFZA 2-Meter 1": "DAN2/MEP/HVAC/LV Panel/01 LVP_Energy Meter",
-    "JAFZA 2-Meter 2": "DAN2/MEP/HVAC/LV Panel/02 LVP_Energy Meter",
     "JAFZA 3-Meter 1": "DAN3/ELEC/MDB/01-MDB_Energy Meter",
     "JAFZA 3-Meter 2": "DAN3/ELEC/MDB/02-MDB_Energy Meter",
     "JAFZA 4": "DAN4/MEP/ELEC/LV /01-LVP_Energy Meter",
     "DAFZA 2": "DAN/DAFZA/MEP/ELE/LV/01-LVP_Energy Meter",
     "AFR": "DAN/DWC-AFR/MEP/LVR/LVP-02-MDB_Energy Meter",
-    "CGF": "DAN/DWC-CGF/MEP/LVR/LVP-01-MDB_Energy Meter"   
+    "CGF": "DAN/DWC-CGF/MEP/LVR/LVP-01-MDB_Energy Meter",
+    "JAFZA 2-Meter 2": "DAN2/MEP/HVAC/LV Panel/02 LVP_Energy Meter",
+    "JAFZA 2-Meter 1": "DAN2/MEP/HVAC/LV Panel/01 LVP_Energy Meter"
 }
 
 def process_solar_data(input_file, month, year):
     # Read the Excel file with header starting at row 3 (0-indexed)
-    df = pd.read_excel(input_file, header=2)
+    # Skip the first column if it's empty/unwanted
+    df = pd.read_excel(input_file, header=2, usecols=lambda x: 'Unnamed' not in x)
     
     # Convert date column to datetime
     df['Date'] = pd.to_datetime(df['Date'], dayfirst=True)
     
-    # Filter data for the selected month/year
+    # Filter data for the selected month/year and previous month
     selected_month_data = df[(df['Date'].dt.month == month) & (df['Date'].dt.year == year)].sort_values('Date')
+    
+    # Get previous month and year
+    if month == 1:
+        prev_month = 12
+        prev_year = year - 1
+    else:
+        prev_month = month - 1
+        prev_year = year
+    
+    # Get last day of previous month
+    last_day_prev_month = calendar.monthrange(prev_year, prev_month)[1]
+    prev_month_last_day = datetime(prev_year, prev_month, last_day_prev_month)
+    
+    # Get data for last day of previous month
+    prev_month_data = df[df['Date'] == prev_month_last_day]
     
     # Create output dataframe
     output_data = []
@@ -44,27 +60,28 @@ def process_solar_data(input_file, month, year):
             try:
                 current_val = float(current_day_data[meter].values[0])
                 
-                # For the first day of data, delta is just the current value (no previous day)
-                if i == 0:
-                    delta = current_val
+                # For the first day of the month, use last day of previous month
+                if day.day == 1:
+                    prev_day_data = prev_month_data
                 else:
-                    # Get previous day data
-                    prev_day = selected_month_data['Date'].iloc[i-1]
+                    # Get previous day data (within same month)
+                    prev_day = day - timedelta(days=1)
                     prev_day_data = selected_month_data[selected_month_data['Date'] == prev_day]
-                    prev_val = float(prev_day_data[meter].values[0])
-                    delta = current_val - prev_val
+                
+                prev_val = float(prev_day_data[meter].values[0])
+                delta = current_val - prev_val
                 
                 # Format date as "DD-MM-YYYY 23:59:00"
                 formatted_date = day.strftime("%d-%m-%Y") + " 23:59:00"
                 
-                # Get the actual meter name from mapping, or use reference if not found
+                # Get the actual meter name from mapping
                 actual_meter = METER_MAPPING.get(meter, meter)
                 
                 output_data.append({
                     'Time': formatted_date,
-                    'Reference Meter': meter,  # Using the original meter name as reference
+                    'Reference Meter': meter,
                     'Solar Energy': delta,
-                    'Meter': actual_meter  # Using the mapped meter name
+                    'Meter': actual_meter
                 })
             except (IndexError, ValueError) as e:
                 st.warning(f"Missing or invalid data for {meter} on {day.strftime('%d-%m-%Y')}")
@@ -94,7 +111,7 @@ def main():
             
             # Show preview
             st.subheader("Preview of Solar Data Import Sheet")
-            st.dataframe(result_df.head())
+            st.dataframe(result_df.head(20))  # Show more rows to see multiple days
             
             # Show meter mapping information
             st.subheader("Current Meter Mapping")

@@ -15,7 +15,7 @@ METER_MAPPING = {
     "JAFZA 4": "DAN4/MEP/ELEC/LV /01-LVP_Energy Meter",
     "DAFZA 2": "DAN/DAFZA/MEP/ELE/LV/01-LVP_Energy Meter",
     "AFR": "DAN/DWC-AFR/MEP/LVR/LVP-02-MDB_Energy Meter",
-    "CGF": "DAN/DWC-CGF/MEP/LVR/LVP-01-MDB_Energy Meter    
+    "CGF": "DAN/DWC-CGF/MEP/LVR/LVP-01-MDB_Energy Meter"   
 }
 
 def process_solar_data(input_file, month, year):

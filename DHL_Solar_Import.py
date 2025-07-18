@@ -6,10 +6,10 @@ import io
 
 # Complete meter mapping dictionary based on your example
 METER_MAPPING = {
-    "JAFZA 1-Meter 1": "DAN1/TY/PHLS/ELEC/LV/01-MDB_Energy Meter",
-    "JAFZA 1-Meter 2": "DAN1/TY/PHLS/ELEC/LV/02-MDB_Energy Meter",
-    "JAFZA 3-Meter 1": "DAN3/ELEC/MDB/01-MDB_Energy Meter",
-    "JAFZA 3-Meter 2": "DAN3/ELEC/MDB/02-MDB_Energy Meter",
+    "JAFZA 1-Meter 1": "DAN1/TY/PHLS/ELEC/LV/02-MDB_Energy Meter",
+    "JAFZA 1-Meter 2": "DAN1/TY/PHLS/ELEC/LV/01-MDB_Energy Meter",
+    "JAFZA 3-Meter 1": "DAN3/ELEC/MDB/02-MDB_Energy Meter",
+    "JAFZA 3-Meter 2": "DAN3/ELEC/MDB/01-MDB_Energy Meter",
     "JAFZA 4": "DAN4/MEP/ELEC/LV /01-LVP_Energy Meter",
     "DAFZA 2": "DAN/DAFZA/MEP/ELE/LV/01-LVP_Energy Meter",
     "AFR": "DAN/DWC-AFR/MEP/LVR/LVP-02-MDB_Energy Meter",
